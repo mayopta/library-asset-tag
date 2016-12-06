@@ -1,5 +1,6 @@
 (ns library-asset-tag.handler
-  (:require [compojure.core :refer :all]
+  (:require [library-asset-tag.auth :as auth]
+            [compojure.core :refer :all]
             [compojure.route :as route]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.session :refer [wrap-session]]
@@ -19,31 +20,6 @@
     (get-inventory-summary)
     (get-inventory-range start end)))
 
-(defn- get-login [session]
-  (println "get-login:" session)
-  (if-let [token (:identity session)]
-    token
-    {:status 401}))
-
-(defn- login [session token]
-  (println "login:" session)
-  {:status 200
-   :session (assoc session :identity token)})
-
-(defn- logout [session]
-  (println "logout:" session)
-  (if (:identity session)
-    {:status 200
-     :session (dissoc session :identity)}
-    {:status 401}))
-
-(defn authenticated-user [req]
-  (if (-> req :session :identity)
-    true
-    (error "User must be authenticated")))
-
-(defn no-restrictions [req] true)
-
 (defroutes secure-api-routes
   (context "/inventory" []
            (GET "/" [& params] (get-inventory params))
@@ -51,14 +27,14 @@
 
 (defroutes login-api-routes
   (context "/login" []
-           (GET "/" {session :session} (get-login session))
-           (PUT "/" [token :as {session :session}] (login session token))
-           (DELETE "/" {session :session} (logout session))))
+           (GET "/" {session :session} (auth/get-login session))
+           (PUT "/" [token :as {session :session}] (auth/login session token))
+           (DELETE "/" {session :session} (auth/logout session))))
 
 (defroutes api-routes
   (context "/api/v1" []
-           (restrict login-api-routes {:handler no-restrictions})
-           (restrict secure-api-routes {:handler authenticated-user})
+           (restrict login-api-routes {:handler auth/no-restrictions})
+           (restrict secure-api-routes {:handler auth/authenticated?})
            (route/not-found "Not Found")))
 
 ;; Create an instance
