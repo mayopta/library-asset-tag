@@ -1,6 +1,7 @@
 (ns library-asset-tag.handler
   (:require [library-asset-tag.auth :as auth]
             [library-asset-tag.inventory :as inventory]
+            [library-asset-tag.db :as db]
             [compojure.core :refer :all]
             [compojure.route :as route]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
@@ -27,7 +28,6 @@
            (restrict secure-api-routes {:handler auth/authenticated?})
            (route/not-found "Not Found")))
 
-;; Create an instance
 (def backend (backends/session))
 
 (def app
@@ -35,3 +35,6 @@
       wrap-session
       (wrap-authentication backend)
       (wrap-authorization backend)))
+
+(defn mock-init []
+  (db/connect "datomic:mem:/library-asset-tag"))

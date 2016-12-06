@@ -7,9 +7,11 @@
                  [compojure "1.5.1"]
                  [ring "1.5.0"]
                  [ring/ring-defaults "0.2.1"]
-                 [buddy/buddy-auth "1.3.0"]]
+                 [buddy/buddy-auth "1.3.0"]
+                 [com.datomic/datomic-free "0.9.5407"]]
   :plugins [[lein-ring "0.9.7"]]
-  :ring {:handler library-asset-tag.handler/app}
+  :ring {:init library-asset-tag.handler/mock-init
+         :handler library-asset-tag.handler/app}
   :main ^:skip-aot library-asset-tag.main
   :profiles {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
                                   [ring/ring-mock "0.3.0"]]}
