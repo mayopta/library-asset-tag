@@ -4,7 +4,9 @@
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.session :refer [wrap-session]]
             [buddy.auth.backends :as backends]
-            [buddy.auth.middleware :refer [wrap-authentication wrap-authorization]]))
+            [buddy.auth :refer [authenticated? throw-unauthorized]]
+            [buddy.auth.middleware :refer [wrap-authentication wrap-authorization]]
+            [buddy.auth.accessrules :refer [restrict success error]]))
 
 (defn- get-inventory-summary []
   (str "Summary:"))
@@ -35,18 +37,28 @@
      :session (dissoc session :identity)}
     {:status 401}))
 
+(defn authenticated-user [req]
+  (if (-> req :session :identity)
+    true
+    (error "User must be authenticated")))
+
+(defn no-restrictions [req] true)
+
 (defroutes secure-api-routes
   (context "/inventory" []
            (GET "/" [& params] (get-inventory params))
            (GET "/:id" [id] (str "Hello " id))))
 
+(defroutes login-api-routes
+  (context "/login" []
+           (GET "/" {session :session} (get-login session))
+           (PUT "/" [token :as {session :session}] (login session token))
+           (DELETE "/" {session :session} (logout session))))
+
 (defroutes api-routes
   (context "/api/v1" []
-           secure-api-routes
-           (context "/login" []
-                    (GET "/" {session :session} (get-login session))
-                    (PUT "/" [token :as {session :session}] (login session token))
-                    (DELETE "/" {session :session} (logout session)))
+           (restrict login-api-routes {:handler no-restrictions})
+           (restrict secure-api-routes {:handler authenticated-user})
            (route/not-found "Not Found")))
 
 ;; Create an instance
@@ -55,4 +67,5 @@
 (def app
   (-> (wrap-defaults api-routes api-defaults)
       wrap-session
-      (wrap-authentication backend)))
+      (wrap-authentication backend)
+      (wrap-authorization backend)))
