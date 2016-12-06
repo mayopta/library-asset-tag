@@ -10,3 +10,6 @@
   (if (= summary "true")
     (get-summary)
     (get-range start end)))
+
+(defn get-by-id [id]
+  (str "Hello " id))

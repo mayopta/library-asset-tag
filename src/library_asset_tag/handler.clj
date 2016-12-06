@@ -13,7 +13,7 @@
 (defroutes secure-api-routes
   (context "/inventory" []
            (GET "/" [& params] (inventory/get params))
-           (GET "/:id" [id] (str "Hello " id))))
+           (GET "/:id" [id] (inventory/get-by-id id))))
 
 (defroutes login-api-routes
   (context "/login" []
