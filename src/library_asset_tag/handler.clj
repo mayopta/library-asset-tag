@@ -1,6 +1,7 @@
 (ns library-asset-tag.handler
   (:require [library-asset-tag.auth :as auth]
             [library-asset-tag.inventory :as inventory]
+            [library-asset-tag.sequence :as sequence]
             [library-asset-tag.db :as db]
             [compojure.core :refer :all]
             [compojure.route :as route]
@@ -14,7 +15,11 @@
 (defroutes secure-api-routes
   (context "/inventory" []
            (GET "/" [& params] (inventory/get params))
-           (GET "/:id" [id] (inventory/get-by-id id))))
+           (GET "/:id" [id] (inventory/get-by-id id)))
+  (context "/config" []
+           (context "/next" []
+                    (GET "/" [] (sequence/get))
+                    (POST "/" [value] (sequence/set value)))))
 
 (defroutes login-api-routes
   (context "/login" []

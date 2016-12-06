@@ -81,3 +81,6 @@
     (when init
       (install-schema conn))
     (swap! handle assoc :url url :conn conn)))
+
+(defn get-connection []
+  (:conn @handle))
