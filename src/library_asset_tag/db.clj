@@ -8,58 +8,16 @@
 ;;------------------------------------------------------
 ;; define our transaction functions
 ;;------------------------------------------------------
-(def inc-version
-  "Atomically increment the document version (or initialize to '1')"
+(def alloc-assetid
+  "Atomically increment the next sequence (or initialize to '1')"
   #db/fn {:lang :clojure
-          :params [db id docid]
-          :code (let [doc (d/entity db [:document/id docid])]
+          :params [db id]
+          :code (let [entity (d/entity db [:sequence/id 0])]
                   [{:db/id id
-                    :document/id docid
-                    :document/version (if-let [version (:document/version doc)]
-                                        (inc version)
+                    :sequence/id 0
+                    :sequence/next (if-let [next (:sequence/next entity)]
+                                        (inc next)
                                         1)}])})
-
-(def update-entry
-  "Update an entry in the document, inserting it if it doesn't already exist"
-  #db/fn {:lang :clojure
-          :params [db id docid name value]
-          :code (if-let [entryid (q '[:find ?entry .
-                                      :in $ ?docid ?name
-                                      :where
-                                      [?doc :document/id ?docid]
-                                      [?doc :document/entries ?entry]
-                                      [?entry :entry/name ?name]]
-                                    db docid name)]
-                  ;; the entry already exists, so simply update its value
-                  [{:db/id entryid,
-                    :entry/value value}]
-                  ;; the entry doesn't exist, so we need to fully insert it
-                  (let [entryid (d/tempid :db.part/user)]
-                    [{:db/id entryid,
-                      :entry/name name
-                      :entry/value value}
-                     {:db/id id
-                      :document/id docid
-                      :document/entries [entryid]
-                      }]))})
-
-(def remove-entry
-  "Remove an entry from the document"
-  #db/fn {:lang :clojure
-          :params [db id docid name]
-          :code (if-let [entryid (q '[:find ?entry .
-                                      :in $ ?docid ?name
-                                      :where
-                                      [?doc :document/id ?docid]
-                                      [?doc :document/entries ?entry]
-                                      [?entry :entry/name ?name]]
-                                    db docid name)]
-                  ;; the entry exists, so go ahead and remove it
-                  [[:db.fn/retractEntity entryid]
-                   [:db/retract id :document/entries entryid]]
-                  ;; the entry doesn't exist, do nothing
-                  []
-                  )})
 
 ;;------------------------------------------------------
 ;; install-schema - initializes a new database by installing
@@ -71,56 +29,51 @@
                ;;------------------------------------------------------
                ;; install our schema
                ;;------------------------------------------------------
-               ;; document schema
+
+               ;; inventory schema
                {:db/id (d/tempid :db.part/db)
-                :db/ident :document/id
-                :db/valueType :db.type/string
+                :db/ident :inventory/assetid
+                :db/valueType :db.type/long
                 :db/cardinality :db.cardinality/one
                 :db/unique :db.unique/identity
                 :db/index true
-                :db/doc "A unique identifier for this document"
+                :db/doc "A unique identifier for this asset in inventory"
                 :db.install/_attribute :db.part/db}
                {:db/id (d/tempid :db.part/db)
-                :db/ident :document/version
-                :db/valueType :db.type/long
-                :db/cardinality :db.cardinality/one
-                :db/doc "The version of this document after commit"
-                :db.install/_attribute :db.part/db}
-               {:db/id (d/tempid :db.part/db)
-                :db/ident :document/entries
-                :db/valueType :db.type/ref
-                :db/cardinality :db.cardinality/many
-                :db/isComponent true
-                :db/doc "Name/value pair entries attached to this document"
-                :db.install/_attribute :db.part/db}
-
-               ;; entry (name/value pair) schema
-               {:db/id (d/tempid :db.part/db)
-                :db/ident :entry/name
+                :db/ident :inventory/creator
                 :db/valueType :db.type/string
                 :db/cardinality :db.cardinality/one
-                :db/index true
-                :db/doc "Name (key) of this entry"
+                :db/doc "The principal that created the asset tag"
                 :db.install/_attribute :db.part/db}
                {:db/id (d/tempid :db.part/db)
-                :db/ident :entry/value
-                :db/valueType :db.type/bytes
+                :db/ident :inventory/notes
+                :db/valueType :db.type/string
                 :db/cardinality :db.cardinality/one
-                :db/doc "(Opaque) value of this entry"
+                :db/doc "Optional notes attached to the allocation"
+                :db.install/_attribute :db.part/db}
+
+               ;; sequence allocation for assets
+               {:db/id (d/tempid :db.part/db)
+                :db/ident :sequence/id
+                :db/valueType :db.type/long
+                :db/cardinality :db.cardinality/one
+                :db/unique :db.unique/identity
+                :db/index true
+                :db/doc "The identity of our sequence records (must be 0)"
+                :db.install/_attribute :db.part/db}
+               {:db/id (d/tempid :db.part/db)
+                :db/ident :sequence/next
+                :db/valueType :db.type/long
+                :db/cardinality :db.cardinality/one
+                :db/doc "The value of our next sequence to allocate"
                 :db.install/_attribute :db.part/db}
 
                ;;------------------------------------------------------
                ;; install our transaction-functions
                ;;------------------------------------------------------
                {:db/id (d/tempid :db.part/user)
-                :db/ident :inc-version
-                :db/fn inc-version}
-               {:db/id (d/tempid :db.part/user)
-                :db/ident :update-entry
-                :db/fn update-entry}
-               {:db/id (d/tempid :db.part/user)
-                :db/ident :remove-entry
-                :db/fn remove-entry}]))
+                :db/ident :alloc-assetid
+                :db/fn alloc-assetid}]))
 
 (defn connect [url]
   (let [init (d/create-database url)
