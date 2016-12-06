@@ -35,11 +35,14 @@
      :session (dissoc session :identity)}
     {:status 401}))
 
+(defroutes secure-api-routes
+  (context "/inventory" []
+           (GET "/" [& params] (get-inventory params))
+           (GET "/:id" [id] (str "Hello " id))))
+
 (defroutes api-routes
   (context "/api/v1" []
-           (context "/inventory" []
-                    (GET "/" [& params] (get-inventory params))
-                    (GET "/:id" [id] (str "Hello " id)))
+           secure-api-routes
            (context "/login" []
                     (GET "/" {session :session} (get-login session))
                     (PUT "/" [token :as {session :session}] (login session token))
