@@ -7,7 +7,7 @@
 
 (def options
   [["-h" "--help"]
-   [nil "--port PORT" "The post to host our service endpoint"
+   [nil "--port PORT" "The port to host our service endpoint"
     :default 3000
     :parse-fn #(Integer/parseInt %)
     :validate [#(< 0 % 65536) "Must be a number between 0 and 65536"]]])
