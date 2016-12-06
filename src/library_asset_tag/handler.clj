@@ -1,5 +1,6 @@
 (ns library-asset-tag.handler
   (:require [library-asset-tag.auth :as auth]
+            [library-asset-tag.inventory :as inventory]
             [compojure.core :refer :all]
             [compojure.route :as route]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
@@ -9,20 +10,9 @@
             [buddy.auth.middleware :refer [wrap-authentication wrap-authorization]]
             [buddy.auth.accessrules :refer [restrict success error]]))
 
-(defn- get-inventory-summary []
-  (str "Summary:"))
-
-(defn- get-inventory-range [start end]
-  (str "Returning range " start (when end (str "-" end))))
-
-(defn- get-inventory [{:keys [summary start end] :as params}]
-  (if (= summary "true")
-    (get-inventory-summary)
-    (get-inventory-range start end)))
-
 (defroutes secure-api-routes
   (context "/inventory" []
-           (GET "/" [& params] (get-inventory params))
+           (GET "/" [& params] (inventory/get params))
            (GET "/:id" [id] (str "Hello " id))))
 
 (defroutes login-api-routes
