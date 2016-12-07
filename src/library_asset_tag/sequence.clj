@@ -13,6 +13,5 @@
 (defn set [value]
   (let [conn (database/get-connection)]
     (datomic/transact conn [[:db/add
-                             (tempid :db.part/user)
-                             :sequence/id 0
+                             [:sequence/id 0]
                              :sequence/next value]])))

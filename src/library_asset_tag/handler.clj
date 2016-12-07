@@ -5,6 +5,7 @@
             [library-asset-tag.db :as db]
             [compojure.core :refer :all]
             [compojure.route :as route]
+            [compojure.coercions :refer [as-int]]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.session :refer [wrap-session]]
             [buddy.auth.backends :as backends]
@@ -19,7 +20,7 @@
   (context "/config" []
            (context "/next" []
                     (GET "/" [] (sequence/get))
-                    (POST "/" [value] (sequence/set value)))))
+                    (POST "/" [value :<< as-int] (sequence/set value)))))
 
 (defroutes login-api-routes
   (context "/login" []
