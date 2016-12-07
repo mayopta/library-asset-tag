@@ -1,17 +1,55 @@
 (ns library-asset-tag.inventory
   (:require [library-asset-tag.db :as database]
+            [clojure.string :as string]
             [datomic.api :refer [tempid] :as datomic]))
+
+(def text-content {"Content-Type" "text/plain"})
 
 (defn- get-summary []
   (str "Summary:"))
 
+(defn- filter-range [start end coll]
+  (cond
+    (and (some? start) (some? end))
+    (let [count (- end start)]
+      (->> coll (drop start) (take count)))
+
+    (some? start)
+    (drop start coll)
+
+    :else
+    coll))
+
+(defn- parse-or-nil [val]
+  (if val
+    (Integer/parseInt val)
+    nil))
+
 (defn- get-range [start end]
-  (str "Returning range " start (when end (str "-" end))))
+  (if-not (or (and (some? start) (neg? start))
+              (and (some? end) (nil? start))
+              (and (some? start) (some? end) (>= start end )))
+
+    (let [db (-> (database/get-connection) datomic/db)
+          data (->> (datomic/q '[:find [?i ...]
+                                 :in $
+                                 :where [_ :inventory/assetid ?i]]
+                               db)
+                    (filter-range start end)
+                    (string/join \newline))]
+      {:status 200
+       :headers text-content
+       :body data})
+
+    ;; else
+    {:status 400
+     :headers text-content
+     :body (str "Bad start/end parameters")}))
 
 (defn get [{:keys [summary start end] :as params}]
   (if (= summary "true")
     (get-summary)
-    (get-range start end)))
+    (get-range (parse-or-nil start) (parse-or-nil end))))
 
 (defn allocate [uri]
   (let [conn (database/get-connection)
