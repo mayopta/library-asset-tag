@@ -1,6 +1,6 @@
 (ns library-asset-tag.sequence
   (:require [library-asset-tag.db :as database]
-            [datomic.api :as datomic]))
+            [datomic.api :refer [tempid] :as datomic]))
 
 (defn get []
   (let [db (-> (database/get-connection) datomic/db)
@@ -12,5 +12,7 @@
 
 (defn set [value]
   (let [conn (database/get-connection)]
-    (datomic/transact conn {:tx-data [{:sequence/id 0
-                                       :sequence/next value}]})))
+    (datomic/transact conn [[:db/add
+                             (tempid :db.part/user)
+                             :sequence/id 0
+                             :sequence/next value]])))
