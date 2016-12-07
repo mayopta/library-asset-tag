@@ -16,8 +16,8 @@
 (defroutes secure-api-routes
   (context "/inventory" []
            (GET "/" [& params] (inventory/get params))
-           (POST "/" [] (inventory/allocate))
-           (GET "/:id" [id] (inventory/get-by-id id)))
+           (POST "/" {uri :uri} (inventory/allocate uri))
+           (GET "/:id" [id :<< as-int] (inventory/get-by-id id)))
   (context "/config" []
            (context "/next" []
                     (GET "/" [] (sequence/get))

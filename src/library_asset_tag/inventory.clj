@@ -13,7 +13,7 @@
     (get-summary)
     (get-range start end)))
 
-(defn allocate []
+(defn allocate [uri]
   (let [conn (database/get-connection)
         invid (tempid :db.part/user)
         {:keys [db-after tempids]} (->> [[:alloc-assetid invid {}]]
@@ -25,7 +25,7 @@
                      :inventory/assetid)]
 
     {:status 201
-     :headers {"Location" (str "/" assetid)}}))
+     :headers {"Location" (str uri "/" assetid)}}))
 
 (defn get-by-id [id]
   (str "Hello " id))
