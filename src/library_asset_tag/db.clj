@@ -11,13 +11,15 @@
 (def alloc-assetid
   "Atomically increment the next sequence (or initialize to '1')"
   #db/fn {:lang :clojure
-          :params [db id]
-          :code (let [entity (d/entity db [:sequence/id 0])]
-                  [{:db/id id
-                    :sequence/id 0
-                    :sequence/next (if-let [next (:sequence/next entity)]
-                                        (inc next)
-                                        1)}])})
+          :params [db id context]
+          :code (let [entity (d/entity db :sequence/id)
+                      assetid (or (:sequence/next entity) 1)]
+                  [{:db/add :sequence/id
+                    :sequence/next (inc assetid)}
+                   {:db/id id
+                    :inventory/assetid assetid
+                    :inventory/creator (:principal context)
+                    :inventory/notes (:notes context)}])})
 
 ;;------------------------------------------------------
 ;; install-schema - initializes a new database by installing

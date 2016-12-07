@@ -1,4 +1,6 @@
-(ns library-asset-tag.inventory)
+(ns library-asset-tag.inventory
+  (:require [library-asset-tag.db :as database]
+            [datomic.api :refer [tempid] :as datomic]))
 
 (defn- get-summary []
   (str "Summary:"))
@@ -10,6 +12,16 @@
   (if (= summary "true")
     (get-summary)
     (get-range start end)))
+
+(defn allocate []
+  (let [conn (database/get-connection)
+        db (datomic/db conn)
+        id (tempid :db.part/user)]
+    (datomic/transact conn [[:alloc-assetid id {}]])
+    (let [assetid (-> (datomic/pull db [:inventory/assetid] id)
+                      :inventory/assetid)]
+      (println "assetid:" assetid)
+      (str assetid))))
 
 (defn get-by-id [id]
   (str "Hello " id))
