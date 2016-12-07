@@ -55,12 +55,7 @@
                ;; sequence allocation for assets
                {:db/id (d/tempid :db.part/db)
                 :db/ident :sequence/id
-                :db/valueType :db.type/long
-                :db/cardinality :db.cardinality/one
-                :db/unique :db.unique/identity
-                :db/index true
-                :db/doc "The identity of our sequence records (must be 0)"
-                :db.install/_attribute :db.part/db}
+                :db/doc "The identity of our sequence records"}
                {:db/id (d/tempid :db.part/db)
                 :db/ident :sequence/next
                 :db/valueType :db.type/long

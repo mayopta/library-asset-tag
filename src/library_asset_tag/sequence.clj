@@ -6,12 +6,12 @@
   (let [db (-> (database/get-connection) datomic/db)
         next (-> (datomic/pull db
                                [:sequence/next]
-                               [:sequence/id 0])
+                               :sequence/id)
                  :sequence/next)]
     (str next)))
 
 (defn set [value]
   (let [conn (database/get-connection)]
     (datomic/transact conn [[:db/add
-                             [:sequence/id 0]
+                             :sequence/id
                              :sequence/next value]])))
