@@ -16,13 +16,16 @@
 (defn allocate []
   (let [conn (database/get-connection)
         invid (tempid :db.part/user)
-        {:keys [db-after tempids]} (deref (datomic/transact conn [[:alloc-assetid invid {}]]))
+        {:keys [db-after tempids]} (->> [[:alloc-assetid invid {}]]
+                                        (datomic/transact conn)
+                                        deref)
         assetid (->> invid
                      (datomic/resolve-tempid db-after tempids)
                      (datomic/entity db-after)
                      :inventory/assetid)]
 
-    (println "assetid:" assetid)))
+    {:status 201
+     :headers {"Location" (str "/" assetid)}}))
 
 (defn get-by-id [id]
   (str "Hello " id))
