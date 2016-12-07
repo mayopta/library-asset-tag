@@ -28,4 +28,8 @@
      :headers {"Location" (str uri "/" assetid)}}))
 
 (defn get-by-id [id]
-  (str "Hello " id))
+  (if-let [entity (-> (database/get-connection)
+                      datomic/db
+                      (datomic/entity [:inventory/assetid id]))]
+    {:status 200}
+    {:status 404}))
