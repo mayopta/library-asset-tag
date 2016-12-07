@@ -4,10 +4,10 @@
 
 (defn get []
   (let [db (-> (database/get-connection) datomic/db)
-        next (datomic/pull db
-                           [:sequence/next]
-                           [:sequence/id 0])]
-    (println "next:" next)
+        next (-> (datomic/pull db
+                               [:sequence/next]
+                               [:sequence/id 0])
+                 :sequence/next)]
     (str next)))
 
 (defn set [value]
