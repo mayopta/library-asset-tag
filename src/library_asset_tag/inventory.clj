@@ -20,7 +20,7 @@
     :else
     coll))
 
-(defn- parse-or-nil [val]
+(defn- parse-int [val]
   (if val
     (Integer/parseInt val)
     nil))
@@ -31,6 +31,8 @@
 ;;                         are emitted as newline delimited plaintext values
 ;;---------------------------------------------------------------------------
 (defn- get-range [start end]
+  ;; Our range is only valid if it consists of positive integers, end cannot
+  ;; be specified without start, and end is larger than start
   (if-not (or (and (some? start) (neg? start))
               (and (some? end) (nil? start))
               (and (some? start) (some? end) (>= start end )))
@@ -56,8 +58,11 @@
 (defn get [{:keys [summary start end] :as params}]
   (if (= summary "true")
     (get-summary)
-    (get-range (parse-or-nil start) (parse-or-nil end))))
+    (get-range (parse-int start) (parse-int end))))
 
+;;---------------------------------------------------------------------------
+;; allocate - Allocates a new asset, returning the new location URI
+;;---------------------------------------------------------------------------
 (defn allocate [uri]
   (let [conn (database/get-connection)
         invid (tempid :db.part/user)
