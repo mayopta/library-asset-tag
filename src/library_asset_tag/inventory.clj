@@ -5,9 +5,6 @@
 
 (def text-content {"Content-Type" "text/plain"})
 
-(defn- get-summary []
-  (str "Summary:"))
-
 (defn- filter-range [start end coll]
   (cond
     (and (some? start) (some? end))
@@ -24,6 +21,20 @@
   (if val
     (Integer/parseInt val)
     nil))
+
+;;---------------------------------------------------------------------------
+;; get-summary - get a summary of our available inventory
+;;---------------------------------------------------------------------------
+(defn- get-summary []
+  (let [db (-> (database/get-connection) datomic/db)
+        count (-> (datomic/q '[:find (count ?eid)
+                               :in $
+                               :where [?eid :inventory/assetid]]
+                             db)
+                  flatten
+                  first)]
+    {:status 200
+     :body (str "count:" count)}))
 
 ;;---------------------------------------------------------------------------
 ;; get-range(start, end) - Returns a range of assetids with optional paging
@@ -77,6 +88,9 @@
     {:status 201
      :headers {"Location" (str uri "/" assetid)}}))
 
+;;---------------------------------------------------------------------------
+;; get-by-id - Retrieves a specific asset from the database
+;;---------------------------------------------------------------------------
 (defn get-by-id [id]
   (if-let [entity (-> (database/get-connection)
                       datomic/db
