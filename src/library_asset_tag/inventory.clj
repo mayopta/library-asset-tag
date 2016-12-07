@@ -25,11 +25,18 @@
     (Integer/parseInt val)
     nil))
 
+;;---------------------------------------------------------------------------
+;; get-range(start, end) - Returns a range of assetids with optional paging
+;;                         (via 'start' and 'end' paramters).  The values
+;;                         are emitted as newline delimited plaintext values
+;;---------------------------------------------------------------------------
 (defn- get-range [start end]
   (if-not (or (and (some? start) (neg? start))
               (and (some? end) (nil? start))
               (and (some? start) (some? end) (>= start end )))
 
+    ;; FIXME: We will need to support large data sets eventually,
+    ;; but for now, we just return the entire set in memory
     (let [db (-> (database/get-connection) datomic/db)
           data (->> (datomic/q '[:find [?i ...]
                                  :in $
