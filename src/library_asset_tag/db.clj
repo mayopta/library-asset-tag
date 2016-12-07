@@ -9,17 +9,15 @@
 ;; define our transaction functions
 ;;------------------------------------------------------
 (def alloc-assetid
-  "Atomically increment the next sequence (or initialize to '1')"
+  "Atomically increment the next sequence and simultaneously create an inventory record"
   #db/fn {:lang :clojure
           :params [db id context]
           :code (let [entity (d/entity db :sequence/id)
                       assetid (or (:sequence/next entity) 1)]
-                  [{:db/add :sequence/id
+                  [{:db/id :sequence/id
                     :sequence/next (inc assetid)}
                    {:db/id id
-                    :inventory/assetid assetid
-                    :inventory/creator (:principal context)
-                    :inventory/notes (:notes context)}])})
+                    :inventory/assetid assetid}])})
 
 ;;------------------------------------------------------
 ;; install-schema - initializes a new database by installing

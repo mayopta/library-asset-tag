@@ -16,8 +16,10 @@
 (defn allocate []
   (let [conn (database/get-connection)
         db (datomic/db conn)
-        id (tempid :db.part/user)]
-    (datomic/transact conn [[:alloc-assetid id {}]])
+        id (tempid :db.part/user)
+        result (datomic/transact conn [[:alloc-assetid id {}]])]
+
+    (println "result:" result)
     (let [assetid (-> (datomic/pull db [:inventory/assetid] id)
                       :inventory/assetid)]
       (println "assetid:" assetid)
