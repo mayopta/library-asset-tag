@@ -5,6 +5,7 @@
             [clojure.data.json :as json]))
 
 (def text-content {"Content-Type" "text/plain"})
+(def json-content {"Content-Type" "application/json"})
 
 (defn- filter-range [start end coll]
   (cond
@@ -35,7 +36,7 @@
                   flatten
                   first)]
     {:status 200
-     :header {"Content-Type" "application/json"}
+     :header json-content
      :body (json/write-str {:count count})}))
 
 ;;---------------------------------------------------------------------------
@@ -96,6 +97,11 @@
 (defn get-by-id [id]
   (if-let [entity (-> (database/get-connection)
                       datomic/db
-                      (datomic/entity [:inventory/assetid id]))]
-    {:status 200}
+                      (datomic/pull '[*] [:inventory/assetid id]))]
+    ;; match
+    {:status 200
+     :headers json-content
+     :body (json/write-str entity)}
+
+    ;; else
     {:status 404}))
