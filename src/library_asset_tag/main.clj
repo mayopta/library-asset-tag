@@ -12,14 +12,8 @@
     :default 3000
     :parse-fn #(Integer/parseInt %)
     :validate [#(< 0 % 65536) "Must be a number between 0 and 65536"]]
-   [nil "--db-host HOST" "The host for our database"
-    :default "localhost"]
-   [nil "--db-port PORT" "The port for our database"
-    :default 4334
-    :parse-fn #(Integer/parseInt %)
-    :validate [#(< 0 % 65536) "Must be a number between 0 and 65536"]]
-   [nil "--db-name NAME" "The name of our database on the db server"
-    :default "library-asset-tag"]])
+   [nil "--db-url URL" "The connection string for our database"
+    :default "datomic:mem:/library-asset-tag"]])
 
 (defn exit [status msg & rest]
   (do
@@ -45,8 +39,7 @@
       (exit -1 "Error: " (string/join errors))
 
       :else
-      (let [{:keys [port db-host db-port db-name]} options
-            db-url (str "datomic:free://" db-host ":" db-port "/" db-name)
+      (let [{:keys [port db-url]} options
             db (db/connect db-url)]
         (run-jetty handler/app {:port port})))))
 
