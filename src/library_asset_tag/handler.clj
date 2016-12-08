@@ -35,10 +35,15 @@
            (restrict secure-api-routes {:handler auth/authenticated?})
            (route/not-found "Not Found")))
 
+(defroutes main-routes
+  api-routes
+  (route/resources "/")
+  (route/not-found "Page not found"))
+
 (def backend (backends/session))
 
 (def app
-  (-> (wrap-defaults api-routes api-defaults)
+  (-> (wrap-defaults main-routes api-defaults)
       wrap-session
       (wrap-authentication backend)
       (wrap-authorization backend)))
