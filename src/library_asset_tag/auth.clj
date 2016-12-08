@@ -7,6 +7,7 @@
     {:status 401}))
 
 (defn login [session token]
+  (println "login:" token)
   {:status 200
    :session (assoc session :identity token)})
 

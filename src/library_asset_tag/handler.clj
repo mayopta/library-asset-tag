@@ -26,7 +26,7 @@
 (defroutes login-api-routes
   (context "/login" []
            (GET "/" {session :session} (auth/get-login session))
-           (PUT "/" [token :as {session :session}] (auth/login session token))
+           (PUT "/" {session :session body :body} (auth/login session (slurp body)))
            (DELETE "/" {session :session} (auth/logout session))))
 
 (defroutes api-routes

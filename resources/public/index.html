@@ -21,11 +21,9 @@
         // The ID token you need to pass to your backend:
       var id_token = googleUser.getAuthResponse().id_token;
       var xhr = new XMLHttpRequest();
-      xhr.open('PUT', '/api/v1/login?token=' + id_token);
-      xhr.onload = function() {
-          console.log('Signed in as: ' + xhr.responseText);
-      };
-      xhr.send();
+      xhr.open('PUT', '/api/v1/login');
+      xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+      xhr.send(id_token);
       console.log("ID Token: " + id_token);
       };
     </script>
