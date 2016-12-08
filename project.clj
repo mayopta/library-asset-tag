@@ -8,7 +8,8 @@
                  [ring "1.5.0"]
                  [ring/ring-defaults "0.2.1"]
                  [buddy/buddy-auth "1.3.0"]
-                 [com.datomic/datomic-free "0.9.5407"]]
+                 [com.datomic/datomic-free "0.9.5407"]
+                 [org.clojure/data.json "0.2.6"]]
   :plugins [[lein-ring "0.9.7"]]
   :ring {:init library-asset-tag.handler/mock-init
          :handler library-asset-tag.handler/app}

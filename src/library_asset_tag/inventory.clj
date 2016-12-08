@@ -1,7 +1,8 @@
 (ns library-asset-tag.inventory
   (:require [library-asset-tag.db :as database]
             [clojure.string :as string]
-            [datomic.api :refer [tempid] :as datomic]))
+            [datomic.api :refer [tempid] :as datomic]
+            [clojure.data.json :as json]))
 
 (def text-content {"Content-Type" "text/plain"})
 
@@ -34,7 +35,8 @@
                   flatten
                   first)]
     {:status 200
-     :body (str "count:" count)}))
+     :header {"Content-Type" "application/json"}
+     :body (json/write-str {:count count})}))
 
 ;;---------------------------------------------------------------------------
 ;; get-range(start, end) - Returns a range of assetids with optional paging
