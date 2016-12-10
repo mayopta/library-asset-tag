@@ -4,12 +4,16 @@
   :min-lein-version "2.0.0"
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/tools.cli "0.3.5"]
+                 [org.clojure/data.json "0.2.6"]
+                 [org.clojure/data.codec "0.1.0"]
                  [compojure "1.5.1"]
                  [ring "1.5.0"]
                  [ring/ring-defaults "0.2.1"]
                  [buddy/buddy-auth "1.3.0"]
+                 [buddy/buddy-sign "1.3.0"]
                  [com.datomic/datomic-free "0.9.5407"]
-                 [org.clojure/data.json "0.2.6"]]
+                 [clj-http "3.4.1"]
+                 [cheshire "5.6.3"]]
   :plugins [[lein-ring "0.9.7"]]
   :ring {:init library-asset-tag.handler/mock-init
          :handler library-asset-tag.handler/app}
