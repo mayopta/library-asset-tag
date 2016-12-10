@@ -2,7 +2,7 @@
   (:require [library-asset-tag.db :as database]
             [clojure.string :as string]
             [datomic.api :refer [tempid] :as datomic]
-            [clojure.data.json :as json]
+            [cheshire.core :as json]
             [slingshot.slingshot :as slingshot]))
 
 (def text-content {"Content-Type" "text/plain"})
@@ -41,7 +41,7 @@
                   first)]
     {:status 200
      :header json-content
-     :body (json/write-str {:count count})}))
+     :body (json/generate-string {:count count})}))
 
 ;;---------------------------------------------------------------------------
 ;; get-range(start, end) - Returns a range of assetids with optional paging
@@ -108,7 +108,7 @@
     ;; match
     {:status 200
      :headers json-content
-     :body (json/write-str entity)}
+     :body (json/generate-string entity)}
 
     ;; else
     {:status 404}))
