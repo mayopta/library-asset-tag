@@ -2,7 +2,8 @@
   (:require [library-asset-tag.db :as database]
             [clojure.string :as string]
             [datomic.api :refer [tempid] :as datomic]
-            [clojure.data.json :as json]))
+            [clojure.data.json :as json]
+            [slingshot.slingshot :as slingshot]))
 
 (def text-content {"Content-Type" "text/plain"})
 (def json-content {"Content-Type" "application/json"})
@@ -21,7 +22,10 @@
 
 (defn- parse-int [val]
   (if val
-    (Integer/parseInt val)
+    (slingshot/try+
+     (Integer/parseInt val)
+     (catch Object _
+       (slingshot/throw+ {:type ::param-validation})))
     nil))
 
 ;;---------------------------------------------------------------------------
@@ -70,9 +74,12 @@
      :body (str "Bad start/end parameters")}))
 
 (defn get [{:keys [summary start end] :as params}]
-  (if (= summary "true")
-    (get-summary)
-    (get-range (parse-int start) (parse-int end))))
+  (slingshot/try+
+   (if (= summary "true")
+     (get-summary)
+     (get-range (parse-int start) (parse-int end)))
+   (catch [:type ::param-validation]
+       {:status 400})))
 
 ;;---------------------------------------------------------------------------
 ;; allocate - Allocates a new asset, returning the new location URI
