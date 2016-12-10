@@ -13,7 +13,8 @@
                  [buddy/buddy-sign "1.3.0"]
                  [com.datomic/datomic-free "0.9.5407"]
                  [clj-http "3.4.1"]
-                 [cheshire "5.6.3"]]
+                 [cheshire "5.6.3"]
+                 [slingshot "0.12.2"]]
   :plugins [[lein-ring "0.9.7"]]
   :ring {:init library-asset-tag.handler/mock-init
          :handler library-asset-tag.handler/app}

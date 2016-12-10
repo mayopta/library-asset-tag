@@ -5,7 +5,8 @@
             [buddy.core.codecs.base64 :as b64]
             [clojure.string :as string]
             [cheshire.core :as json]
-            [clj-http.client :as http]))
+            [clj-http.client :as http]
+            [slingshot.slingshot :as slingshot]))
 
 (defn get-login [session]
   (if-let [token (:identity session)]
@@ -16,18 +17,15 @@
   (-> s b64/decode codecs/bytes->str (json/parse-string true)))
 
 (defn login [session token]
-  (let [{:keys [status body]} (http/get (str "https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=" token))]
-
-    (if (= status 200)
-
-      (let [desc (json/parse-string body true)]
-        (println "token:" desc)
-        {:status 200
-         :session (assoc session :identity desc)})
-
-      ;; else
-      {:status status
-       :body "Error validating login token"})))
+  (slingshot/try+
+   (let [{:keys [body]} (http/get (str "https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=" token))]
+     (let [desc (json/parse-string body true)]
+       (println "token:" desc)
+       {:status 200
+        :session (assoc session :identity desc)}))
+   (catch Object e
+     {:status 400
+      :body "Error validating login token"})))
 
 (defn logout [session]
   (if (:identity session)
