@@ -1,5 +1,6 @@
 (ns user
-  (:require [library-asset-tag.handler]
+  (:require [library-asset-tag.core :as core]
+            [library-asset-tag.handler]
             [ring.middleware.reload :refer [wrap-reload]]
             [figwheel-sidecar.repl-api :as figwheel]))
 
@@ -12,6 +13,7 @@
   (wrap-reload #'library-asset-tag.handler/app))
 
 (defn run []
+  (core/init)
   (figwheel/start-figwheel!))
 
 (def browser-repl figwheel/cljs-repl)

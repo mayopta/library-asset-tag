@@ -3,16 +3,21 @@
   :url "http://example.com/FIXME"
   :min-lein-version "2.6.1"
   :dependencies [[org.clojure/clojure "1.8.0"]
-                 [org.clojure/clojurescript "1.9.89" :scope "provided"]
+                 [org.clojure/clojurescript "1.9.293"]
                  [org.clojure/tools.cli "0.3.5"]
                  [compojure "1.5.1"]
                  [ring "1.5.0"]
                  [ring/ring-defaults "0.2.1"]
                  [buddy/buddy-auth "1.3.0"]
                  [com.datomic/datomic-free "0.9.5407"]
+                 [org.omcljs/om "1.0.0-alpha47"]
+                 [ghaskins/om-bootstrap "0.6.2-SNAPSHOT"]
                  [clj-http "3.4.1"]
+                 [happy "0.5.2"]
                  [cheshire "5.6.3"]
-                 [slingshot "0.12.2"]]
+                 [slingshot "0.12.2"]
+                 [cljsjs/google-platformjs-extern "1.0.0-0"]
+                 [funcool/promesa "1.3.1"]]
 
   :plugins [[lein-ring "0.9.7"]
             [lein-cljsbuild "1.1.3"]
@@ -40,7 +45,7 @@
                 ;; Alternatively, you can configure a function to run every time figwheel reloads.
                 ;; :figwheel {:on-jsload "library-asset-tag.core/on-figwheel-reload"}
 
-                :compiler {:main library-asset-tag.core
+                :compiler {:main library-asset-tag.ui.init
                            :asset-path "js/compiled/out"
                            :output-to "resources/public/js/compiled/library-asset-tag.js"
                            :output-dir "resources/public/js/compiled/out"
@@ -55,7 +60,7 @@
                {:id "min"
                 :source-paths ["src/cljs" "src/cljc"]
                 :jar true
-                :compiler {:main library-asset-tag.core
+                :compiler {:main library-asset-tag.ui.init
                            :output-to "resources/public/js/compiled/library-asset-tag.js"
                            :output-dir "target"
                            :source-map-timestamp true

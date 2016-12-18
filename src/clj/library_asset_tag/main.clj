@@ -1,5 +1,6 @@
 (ns library-asset-tag.main
-  (:require [library-asset-tag.handler :as handler]
+  (:require [library-asset-tag.core :as core]
+            [library-asset-tag.handler :as handler]
             [library-asset-tag.db :as db]
             [clojure.string :as string]
             [clojure.tools.cli :refer [parse-opts]]
@@ -41,6 +42,7 @@
       :else
       (let [{:keys [port db-url]} options
             db (db/connect db-url)]
+        (core/init)
         (run-jetty handler/app {:port port})))))
 
 (defn -main [& args]
