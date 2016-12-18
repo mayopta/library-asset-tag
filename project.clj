@@ -10,8 +10,9 @@
                  [ring/ring-defaults "0.2.1"]
                  [buddy/buddy-auth "1.3.0"]
                  [com.datomic/datomic-free "0.9.5407"]
-                 [org.omcljs/om "1.0.0-alpha47"]
-                 [ghaskins/om-bootstrap "0.6.2-SNAPSHOT"]
+                 [org.omcljs/om "1.0.0-alpha47"
+                  :exclusions [cljsjs/react cljsjs/react-dom]]
+                 [cljs-react-material-ui "0.2.33"]
                  [clj-http "3.4.1"]
                  [happy "0.5.2"]
                  [cheshire "5.6.3"]
