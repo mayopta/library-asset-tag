@@ -21,7 +21,7 @@
             (ui/mui-theme-provider
              {:mui-theme
               (ui/get-mui-theme {:palette
-                                 {:primary1-color (ui/color :deep-orange-a100)}
+                                 {:primary1-color (ui/color :indigo-900)}
                                  :raised-button
                                  {:primary-text-color (ui/color :light-black)
                                   :font-weight 200}})}
