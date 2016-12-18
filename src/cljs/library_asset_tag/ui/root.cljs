@@ -19,7 +19,12 @@
           (let [{:keys [login]} (om/props this)
                 status (:status login)]
             (ui/mui-theme-provider
-             {:mui-theme (ui/get-mui-theme)}
+             {:mui-theme
+              (ui/get-mui-theme {:palette
+                                 {:primary1-color (ui/color :deep-orange-a100)}
+                                 :raised-button
+                                 {:primary-text-color (ui/color :light-black)
+                                  :font-weight 200}})}
              (dom/div nil
               (case status
                 :loading (loading/view)

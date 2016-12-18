@@ -10,7 +10,6 @@
 (defui View
   Object
   (render [this]
-          (println "login-view")
           (dom/div
            nil
            (ui/paper
