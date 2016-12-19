@@ -25,3 +25,6 @@
   (om/reconciler
    {:state  init-data
     :parser (om/parser {:read read :mutate mutate})}))
+
+(defn alloc! []
+  (println "alloc!"))

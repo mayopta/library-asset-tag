@@ -1,5 +1,6 @@
 (ns library-asset-tag.ui.home
-  (:require [cljsjs.material-ui]
+  (:require [library-asset-tag.ui.core :as core]
+            [cljsjs.material-ui]
             [cljs-react-material-ui.core :as ui]
             [cljs-react-material-ui.icons :as ic]
             [goog.dom :as gdom]
@@ -10,7 +11,14 @@
   Object
   (render [this]
           (ui/paper nil
-                   (dom/div #js {:className "row"}
+                    (dom/div #js {:className "row center-xs"}
+                             (dom/div #js {:className "col-xs-12"}
+                                      (ui/floating-action-button
+                                       {:mini true
+                                        :secondary true
+                                        :on-touch-tap #(core/alloc!)}
+                                       (ic/content-add))))
+                    (dom/div #js {:className "row"}
                             (dom/div #js {:className "col-xs-12"}
                                      (ui/table
                                       {:selectable false
@@ -20,14 +28,8 @@
                                         :adjust-for-checkbox false}
                                        (ui/table-row
                                         nil
-                                        (ui/table-header-column nil "First ID")
+                                        (ui/table-header-column nil "ID")
                                         (ui/table-header-column nil "Date")))
-                                      (ui/table-body nil))))
-                   (dom/div #js {:className "row center-xs"}
-                            (dom/div #js {:className "col-xs-12"}
-                                     (ui/floating-action-button
-                                      {:mini true
-                                       :secondary true}
-                                      (ic/content-add)))))))
+                                      (ui/table-body nil)))))))
 
 (def view (om/factory View))
