@@ -24,8 +24,8 @@
                                  {:primary1-color (ui/color :indigo-900)
                                   :primary2-color (ui/color :indigo-700)
                                   :primary3-color (ui/color :indigo-400)
-                                  :accent1-color (ui/color :lime-200)
-                                  :accent2-color (ui/color :lime-400)
+                                  :accent1-color (ui/color :lime-500)
+                                  :accent2-color (ui/color :lime-500)
                                   :accent3-color (ui/color :lime-500)}})}
              (dom/div nil
               (case status
