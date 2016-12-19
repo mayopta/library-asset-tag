@@ -16,6 +16,7 @@
                  [clj-http "3.4.1"]
                  [happy "0.5.2"]
                  [cheshire "5.6.3"]
+                 [com.cognitect/transit-cljs "0.8.239"]
                  [slingshot "0.12.2"]
                  [cljsjs/google-platformjs-extern "1.0.0-0"]
                  [funcool/promesa "1.3.1"]]

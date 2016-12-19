@@ -4,7 +4,8 @@
             [om.dom :as dom]))
 
 (def init-data
-  {:login {:status :loading}})
+  {:login {:status :loading}
+   :session-assets []})
 
 (defmulti read om/dispatch)
 
@@ -21,7 +22,18 @@
    (fn []
      (swap! state assoc-in [:login :status] status))})
 
+(defmethod mutate 'session/add-asset
+  [{:keys [state]} k {:keys [id]}]
+  (println "id:" id)
+  {:action
+   (fn []
+     (swap! state assoc-in [:session-assets]
+            (fn [items] (println "items:" items "id:" id)(conj items id))))})
+
 (def reconciler
   (om/reconciler
    {:state  init-data
     :parser (om/parser {:read read :mutate mutate})}))
+
+(defn add-session-asset! [id]
+  (om/transact! reconciler `[(session/add-asset {:id ~id})]))

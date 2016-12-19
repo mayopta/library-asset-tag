@@ -1,9 +1,15 @@
 (ns library-asset-tag.ui.client
-  (:require [happy.core :as h :refer [GET PUT POST DELETE]]
+  (:require [library-asset-tag.ui.core :as core]
+            [om.next :as om]
+            [happy.core :as h :refer [GET PUT POST DELETE]]
             [happy.client.xmlhttprequest :as hc]
-            [promesa.core :as p :include-macros true]))
+            [promesa.core :as p :include-macros true]
+            [cognitect.transit :as t]))
 
 (h/set-default-client! (hc/create))
+
+(def tr (t/reader :json))
+(defn- json-read [str] (t/read tr str))
 
 (defn login! [idtoken]
   (p/do*
@@ -14,12 +20,15 @@
   (p/promise
    (fn [resolve reject]
      (POST "/api/v1/inventory" {} ""
-           {:handler (fn [{:keys [status headers] :as response}]
-
-                       (if (= status 201)
-                         (resolve (headers "location"))
-                         (reject response)))}))))
+           {:handler
+            (fn [{:keys [status body] :as response}]
+              (if (= status 201)
+                (-> body json-read resolve)
+                (reject response)))}))))
 
 (defn alloc! []
   (-> (create-inventory!)
-      (p/then #(println "response:" %))))
+      (p/then
+       (fn [{:strs [assetid] :as body}]
+         (println "assetid:" assetid)
+         (core/add-session-asset! assetid)))))

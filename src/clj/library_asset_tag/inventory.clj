@@ -96,7 +96,8 @@
                      :inventory/assetid)]
 
     {:status 201
-     :headers {"Location" (str uri "/" assetid)}}))
+     :headers (merge {"Location" (str uri "/" assetid)} json-content)
+     :body (json/generate-string {:assetid assetid})}))
 
 ;;---------------------------------------------------------------------------
 ;; get-by-id - Retrieves a specific asset from the database
