@@ -10,12 +10,16 @@
    (PUT "/api/v1/login" idtoken)
    true))
 
-(defn create! []
+(defn create-inventory! []
   (p/promise
    (fn [resolve reject]
-     (POST "/api/v1/inventory" {} {:handler #(resolve %)}))))
+     (POST "/api/v1/inventory" {} ""
+           {:handler (fn [{:keys [status headers] :as response}]
+
+                       (if (= status 201)
+                         (resolve (headers "location"))
+                         (reject response)))}))))
 
 (defn alloc! []
-  (println "alloc!!!")
-  (-> (create!)
+  (-> (create-inventory!)
       (p/then #(println "response:" %))))
