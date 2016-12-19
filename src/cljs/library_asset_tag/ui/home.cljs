@@ -1,5 +1,5 @@
 (ns library-asset-tag.ui.home
-  (:require [library-asset-tag.ui.core :as core]
+  (:require [library-asset-tag.ui.client :as client]
             [cljsjs.material-ui]
             [cljs-react-material-ui.core :as ui]
             [cljs-react-material-ui.icons :as ic]
@@ -16,7 +16,7 @@
                                       (ui/floating-action-button
                                        {:mini true
                                         :secondary true
-                                        :on-touch-tap #(core/alloc!)}
+                                        :on-touch-tap #(client/alloc!)}
                                        (ic/content-add))))
                     (dom/div #js {:className "row"}
                             (dom/div #js {:className "col-xs-12"}
