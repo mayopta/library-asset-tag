@@ -21,10 +21,9 @@
                                        (ui/table-row
                                         nil
                                         (ui/table-header-column nil "First ID")
-                                        (ui/table-header-column nil "Size")
                                         (ui/table-header-column nil "Date")))
                                       (ui/table-body nil))))
-                   (dom/div #js {:className "row"}
+                   (dom/div #js {:className "row center-xs"}
                             (dom/div #js {:className "col-xs-12"}
                                      (ui/floating-action-button
                                       {:mini true
