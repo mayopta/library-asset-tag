@@ -21,10 +21,12 @@
             (ui/mui-theme-provider
              {:mui-theme
               (ui/get-mui-theme {:palette
-                                 {:primary1-color (ui/color :indigo-900)}
-                                 :raised-button
-                                 {:primary-text-color (ui/color :light-black)
-                                  :font-weight 200}})}
+                                 {:primary1-color (ui/color :indigo-900)
+                                  :primary2-color (ui/color :indigo-700)
+                                  :primary3-color (ui/color :indigo-400)
+                                  :accent1-color (ui/color :lime-200)
+                                  :accent2-color (ui/color :lime-400)
+                                  :accent3-color (ui/color :lime-500)}})}
              (dom/div nil
               (case status
                 :loading (loading/view)
