@@ -17,7 +17,7 @@
                                        {:mini true
                                         :secondary true
                                         :on-touch-tap #(client/alloc!)}
-                                       (ic/content-add))))
+                                       (ic/social-plus-one))))
                     (dom/div #js {:className "row"}
                             (dom/div #js {:className "col-xs-12"}
                                      (ui/table
