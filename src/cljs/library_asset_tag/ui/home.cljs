@@ -16,7 +16,8 @@
           (let [{:keys [assets]} (om/props this)]
             (ui/paper nil
                     (dom/div #js {:className "row center-xs"}
-                             (dom/div #js {:className "col-xs-12"}
+                             (dom/div #js {:className "col-xs-12"
+                                           :id "action-buttons"}
                                       (ui/floating-action-button
                                        {:mini true
                                         :secondary true
