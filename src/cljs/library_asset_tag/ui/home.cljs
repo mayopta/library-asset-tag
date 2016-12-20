@@ -39,7 +39,8 @@
                                        (map (fn [asset]
                                               (ui/table-row
                                                nil
-                                               (ui/table-row-column nil asset)))
+                                               (ui/table-row-column nil asset)
+                                               (ui/table-row-column nil "Today")))
                                             assets)))))))))
 
 (def view (om/factory View))
