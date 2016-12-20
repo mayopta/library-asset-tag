@@ -8,9 +8,13 @@
             [om.dom :as dom]))
 
 (defui View
+  static om/IQuery
+  (query [this]
+         [:assets])
   Object
   (render [this]
-          (ui/paper nil
+          (let [{:keys [assets]} (om/props this)]
+            (ui/paper nil
                     (dom/div #js {:className "row center-xs"}
                              (dom/div #js {:className "col-xs-12"}
                                       (ui/floating-action-button
@@ -30,6 +34,12 @@
                                         nil
                                         (ui/table-header-column nil "ID")
                                         (ui/table-header-column nil "Date")))
-                                      (ui/table-body nil)))))))
+                                      (ui/table-body
+                                       {:display-row-checkbox false}
+                                       (map (fn [asset]
+                                              (ui/table-row
+                                               nil
+                                               (ui/table-row-column nil asset)))
+                                            assets)))))))))
 
 (def view (om/factory View))

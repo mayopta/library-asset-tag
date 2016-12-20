@@ -30,5 +30,4 @@
   (-> (create-inventory!)
       (p/then
        (fn [{:strs [assetid] :as body}]
-         (println "assetid:" assetid)
-         (core/add-session-asset! assetid)))))
+         (om/transact! core/reconciler `[(session/add-asset {:id ~assetid})])))))

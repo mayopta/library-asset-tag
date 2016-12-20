@@ -13,10 +13,10 @@
 (defui RootView
   static om/IQuery
   (query [this]
-         [:login])
+         [:login :session])
   Object
   (render [this]
-          (let [{:keys [login]} (om/props this)
+          (let [{:keys [login session]} (om/props this)
                 status (:status login)]
             (ui/mui-theme-provider
              {:mui-theme
@@ -31,7 +31,7 @@
               (case status
                 :loading (loading/view)
                 :logged-out (login/view)
-                :logged-in (main/view)))))))
+                :logged-in (main/view session)))))))
 
 (defn init []
   (om/add-root! core/reconciler

@@ -1,5 +1,6 @@
 (ns library-asset-tag.ui.main
-  (:require [library-asset-tag.ui.auth :as auth]
+  (:require [library-asset-tag.ui.core :as core]
+            [library-asset-tag.ui.auth :as auth]
             [library-asset-tag.ui.home :as home]
             [library-asset-tag.ui.activity :as activity]
             [cljsjs.material-ui]
@@ -25,7 +26,7 @@
                     (ui/tab
                      {:label "Home"
                       :icon (ic/action-home)}
-                     (home/view))
+                     (-> this om/props home/view))
                     (ui/tab
                      {:label "Activity"
                       :icon (ic/action-restore)}
