@@ -5,7 +5,7 @@
 
 (def init-data
   {:login {:status :loading}
-   :session {:assets []}})
+   :session {:assets '()}})
 
 (defmulti read om/dispatch)
 
