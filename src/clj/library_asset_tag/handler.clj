@@ -8,6 +8,7 @@
             [compojure.coercions :refer [as-int]]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.session :refer [wrap-session]]
+            [ring.middleware.gzip :refer [wrap-gzip]]
             [buddy.auth.backends :as backends]
             [buddy.auth :refer [authenticated? throw-unauthorized]]
             [buddy.auth.middleware :refer [wrap-authentication wrap-authorization]]
@@ -46,7 +47,8 @@
   (-> (wrap-defaults main-routes api-defaults)
       wrap-session
       (wrap-authentication backend)
-      (wrap-authorization backend)))
+      (wrap-authorization backend)
+      (wrap-gzip)))
 
 (defn mock-init []
   (db/connect "datomic:mem:/library-asset-tag"))
