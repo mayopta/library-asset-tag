@@ -9,7 +9,8 @@
                  [ring "1.5.0"]
                  [ring/ring-defaults "0.2.1"]
                  [buddy/buddy-auth "1.3.0"]
-                 [com.datomic/datomic-free "0.9.5407"]
+                 [com.datomic/datomic-free "0.9.5407"
+                  :exclusions [com.google.guava/guava]]
                  [org.omcljs/om "1.0.0-alpha47"
                   :exclusions [cljsjs/react cljsjs/react-dom]]
                  [cljs-react-material-ui "0.2.33"]
