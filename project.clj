@@ -20,7 +20,9 @@
                  [slingshot "0.12.2"]
                  [cljsjs/google-platformjs-extern "1.0.0-0"]
                  [funcool/promesa "1.3.1"]
-                 [bk/ring-gzip "0.1.1"]]
+                 [bk/ring-gzip "0.1.1"]
+                 [clj-time "0.12.2"]
+                 [com.andrewmcveigh/cljs-time "0.4.0"]]
 
   :plugins [[lein-ring "0.9.7"]
             [lein-cljsbuild "1.1.3"]

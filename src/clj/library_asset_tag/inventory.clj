@@ -3,7 +3,10 @@
             [clojure.string :as string]
             [datomic.api :refer [tempid] :as datomic]
             [cheshire.core :as json]
-            [slingshot.slingshot :as slingshot]))
+            [slingshot.slingshot :as slingshot]
+            [clj-time.core :as t]
+            [clj-time.coerce :as c]
+            [clj-time.local :as l]))
 
 (def text-content {"Content-Type" "text/plain"})
 (def json-content {"Content-Type" "application/json"})
@@ -87,7 +90,8 @@
 (defn allocate [uri]
   (let [conn (database/get-connection)
         invid (tempid :db.part/user)
-        {:keys [db-after tempids]} (->> [[:alloc-assetid invid {}]]
+        timestamp (-> (l/local-now) c/to-long)
+        {:keys [db-after tempids]} (->> [[:alloc-assetid invid {} timestamp]]
                                         (datomic/transact conn)
                                         deref)
         assetid (->> invid
@@ -97,7 +101,8 @@
 
     {:status 201
      :headers (merge {"Location" (str uri "/" assetid)} json-content)
-     :body (json/generate-string {:assetid assetid})}))
+     :body (json/generate-string {:assetid assetid
+                                  :timestamp timestamp})}))
 
 ;;---------------------------------------------------------------------------
 ;; get-by-id - Retrieves a specific asset from the database

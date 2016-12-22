@@ -29,10 +29,10 @@
      (swap! state assoc-in [:login :user] user))})
 
 (defmethod mutate 'session/add-asset
-  [{:keys [state]} k {:keys [id]}]
+  [{:keys [state]} k {:keys [id timestamp] :as value}]
   {:action
    (fn []
-     (swap! state update-in [:session :assets] conj id))})
+     (swap! state update-in [:session :assets] conj value))})
 
 (def reconciler
   (om/reconciler

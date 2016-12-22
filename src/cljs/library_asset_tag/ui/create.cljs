@@ -5,7 +5,14 @@
             [cljs-react-material-ui.icons :as ic]
             [goog.dom :as gdom]
             [om.next :as om :refer-macros [defui]]
-            [om.dom :as dom]))
+            [om.dom :as dom]
+            [cljs-time.coerce :as c]
+            [cljs-time.format :as f]))
+
+(def timestamp-formatter (f/formatters :rfc822))
+
+(defn- convert-timestamp [ts]
+  (->> ts c/from-long (f/unparse timestamp-formatter)))
 
 (defui View
   static om/IQuery
@@ -26,7 +33,7 @@
                                         )
                                (dom/div #js {:className "col-xs-8"
                                             :id "current-id"}
-                                        (dom/h1 nil (first assets))))
+                                        (dom/h1 nil (-> assets first :id))))
                       (dom/div #js {:className "row center-xs"}
                                (dom/div #js {:className "col-xs-12"}
                                         (dom/h3 #js {:style
@@ -48,11 +55,11 @@
                                            (ui/table-header-column nil "Date")))
                                          (ui/table-body
                                           {:display-row-checkbox false}
-                                          (map (fn [asset]
+                                          (map (fn [{:keys [id timestamp] :as asset}]
                                                  (ui/table-row
                                                   nil
-                                                  (ui/table-row-column nil asset)
-                                                  (ui/table-row-column nil "Today")))
+                                                  (ui/table-row-column nil id)
+                                                  (ui/table-row-column nil (convert-timestamp timestamp))))
                                                assets)))))))))
 
 (def view (om/factory View))

@@ -52,5 +52,7 @@
 (defn alloc! []
   (-> (create-inventory!)
       (p/then
-       (fn [{:keys [assetid] :as body}]
-         (om/transact! core/reconciler `[(session/add-asset {:id ~assetid})])))))
+       (fn [{:keys [assetid timestamp] :as body}]
+         (om/transact! core/reconciler
+                       `[(session/add-asset {:id ~assetid
+                                             :timestamp ~timestamp})])))))

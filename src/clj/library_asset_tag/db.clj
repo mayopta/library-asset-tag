@@ -11,13 +11,14 @@
 (def alloc-assetid
   "Atomically increment the next sequence and simultaneously create an inventory record"
   (d/function {:lang :clojure
-               :params '[db id context]
+               :params '[db id context timestamp]
                :code '(let [entity (d/entity db :sequence/id)
                            assetid (or (:sequence/next entity) 10006500)]
                        [{:db/id :sequence/id
                          :sequence/next (inc assetid)}
                         {:db/id id
-                         :inventory/assetid assetid}])}))
+                         :inventory/assetid assetid
+                         :inventory/timestamp timestamp}])}))
 
 ;;------------------------------------------------------
 ;; install-schema - initializes a new database by installing
@@ -38,6 +39,12 @@
                 :db/unique :db.unique/identity
                 :db/index true
                 :db/doc "A unique identifier for this asset in inventory"
+                :db.install/_attribute :db.part/db}
+               {:db/id (d/tempid :db.part/db)
+                :db/ident :inventory/timestamp
+                :db/valueType :db.type/long
+                :db/cardinality :db.cardinality/one
+                :db/doc "The timestamp of asset creation"
                 :db.install/_attribute :db.part/db}
                {:db/id (d/tempid :db.part/db)
                 :db/ident :inventory/creator
