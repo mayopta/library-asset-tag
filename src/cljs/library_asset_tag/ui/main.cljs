@@ -16,7 +16,8 @@
   (render [this]
           (dom/div nil
                    (ui/app-bar
-                    {:title "Library Assets"
+                    {:title "Mayo Library Assets"
+                     :show-menu-icon-button false
                      :icon-element-right
                      (ui/flat-button
                       {:label     "Logout"
