@@ -9,32 +9,54 @@
 
 (defn inst [] (.. js/gapi.auth2 (getAuthInstance)))
 
-(defn- update [signedin]
-  (om/transact! core/reconciler (if signedin
-                                  '[(login {:status :logged-in})]
-                                  '[(login {:status :logged-out})])))
+(defn- update [user]
+  (om/transact! core/reconciler (if user
+                                  `[(auth/login {:status :logged-in :user ~user})]
+                                  '[(auth/login {:status :logged-out :user nil})])))
+
+(defn- google-signedin? []
+  (let [auth2 (inst)]
+    (.get auth2.isSignedIn)))
+
+(defn- google-signout! []
+  (let [auth2 (inst)]
+    (p/promise
+     (fn [resolve reject]
+       (.. auth2 (signOut) (then (resolve true)))))))
+
+(defn- get-google-token []
+  (let [auth2 (inst)]
+    (p/do*
+     (-> auth2.currentUser
+         .get
+         .getAuthResponse
+         (js->clj :keywordize-keys true)
+         :id_token))))
 
 (defn refresh []
-  (let [auth2 (inst)]
-    (if-let [signedin (.get auth2.isSignedIn)]
-      (let [idtoken (-> auth2.currentUser
-                        .get
-                        .getAuthResponse
-                        (js->clj :keywordize-keys true)
-                        :id_token)]
-        (-> (client/login! idtoken)
-            (p/then update)))
+  (-> (client/get-login)
+      (p/then (fn [response]
 
-      ;; else
-      (update false))))
+                (if (not= response false)
+                  (update response)
+
+                  ;;else
+                  (if (google-signedin?)
+                    (-> (get-google-token)
+                        (p/then client/login!)
+                        (p/then update))
+
+                    ;;else
+                    (update nil)))))))
 
 (defn login []
   (let [auth2 (inst)]
     (.. auth2 (signIn) (then refresh))))
 
 (defn logout []
-  (let [auth2 (inst)]
-    (.. auth2 (signOut) (then refresh))))
+  (-> (google-signout!)
+      (p/then client/logout!)
+      (p/then refresh)))
 
 (defn- _init []
   (.. js/gapi.auth2 (init #js {:client_id client_id

@@ -12,9 +12,35 @@
 (defn- json-read [str] (t/read tr str))
 
 (defn login! [idtoken]
-  (p/do*
-   (PUT "/api/v1/login" idtoken)
-   true))
+  (p/promise
+   (fn [resolve reject]
+     (PUT "/api/v1/login" {} idtoken
+          {:handler
+           (fn [{:keys [status body] :as response}]
+             (if (= status 200)
+               (-> body json-read resolve)
+               (reject response)))}))))
+
+(defn logout! []
+  (p/promise
+   (fn [resolve reject]
+     (DELETE "/api/v1/login" {}
+          {:handler
+           (fn [{:keys [status] :as response}]
+             (if (= status 200)
+               (resolve true)
+               (reject response)))}))))
+
+(defn get-login []
+  (p/promise
+   (fn [resolve reject]
+     (GET "/api/v1/login" {}
+          {:handler
+           (fn [{:keys [body status] :as response}]
+             (case status
+               200 (-> body json-read resolve)
+               401 (resolve false)
+               (reject response)))}))))
 
 (defn create-inventory! []
   (p/promise

@@ -21,7 +21,7 @@
 
 (defmulti mutate om/dispatch)
 
-(defmethod mutate 'login
+(defmethod mutate 'auth/login
   [{:keys [state]} k {:keys [status]}]
   {:action
    (fn []

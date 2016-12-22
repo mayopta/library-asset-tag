@@ -5,18 +5,22 @@
             [clj-http.client :as http]
             [slingshot.slingshot :as slingshot]))
 
+(defn- token-response [token]
+  {:status 200
+   :content-type "application/json"
+   :body (json/generate-string token)})
+
 (defn get-login [session]
   (if-let [token (:identity session)]
-    token
+    (token-response token)
     {:status 401}))
 
 (defn login [session token]
   (slingshot/try+
    (let [{:keys [body]} (http/get (str "https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=" token))]
      (let [desc (json/parse-string body true)]
-       (println "token:" desc)
-       {:status 200
-        :session (assoc session :identity desc)}))
+       (-> (token-response desc)
+           (assoc :session (assoc session :identity desc)))))
    (catch Object e
      {:status 400
       :body "Error validating login token"})))
