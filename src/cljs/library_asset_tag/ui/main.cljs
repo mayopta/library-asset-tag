@@ -37,7 +37,9 @@
                        :show-menu-icon-button false
                        :icon-element-right
                        (ui/flat-button
-                        {:label     "Logout"
+                        {:icon (ic/action-power-settings-new)
+                         :label     "Logout"
+                         :label-position "before"
                          :secondary true
                          :on-touch-tap   #(auth/logout)})})
                      (ui/tabs
