@@ -11,6 +11,19 @@
             [om.next :as om :refer-macros [defui]]
             [om.dom :as dom]))
 
+(defui Snackbar
+  static om/IQuery
+  (query [this]
+         [:user])
+  Object
+  (render [this]
+          (let [{:keys [user]} (om/props this)]
+            (ui/snackbar {:open true
+                          :auto-hide-duration 4000
+                          :message (str "Logged in as " (:email user))}))))
+
+(def snackbar-view (om/factory Snackbar))
+
 (defui View
   static om/IQuery
   (query [this]
@@ -41,8 +54,6 @@
                        {:label "Settings"
                         :icon (ic/action-settings)}
                        (settings/view)))
-                     (ui/snackbar {:open false
-                                   :auto-hide-duration 4000
-                                   :message (str "Logged in as " (-> login :user :email))})))))
+                     (snackbar-view login)))))
 
 (def view (om/factory View))
