@@ -22,10 +22,12 @@
 (defmulti mutate om/dispatch)
 
 (defmethod mutate 'auth/login
-  [{:keys [state]} k {:keys [status]}]
+  [{:keys [state]} k {:keys [status user]}]
+  (println "user:" user)
   {:action
    (fn []
-     (swap! state assoc-in [:login :status] status))})
+     (swap! state assoc-in [:login :status] status)
+     (swap! state assoc-in [:login :user] user))})
 
 (defmethod mutate 'session/add-asset
   [{:keys [state]} k {:keys [id]}]

@@ -3,13 +3,11 @@
             [om.next :as om]
             [happy.core :as h :refer [GET PUT POST DELETE]]
             [happy.client.xmlhttprequest :as hc]
-            [promesa.core :as p :include-macros true]
-            [cognitect.transit :as t]))
+            [promesa.core :as p :include-macros true]))
 
 (h/set-default-client! (hc/create))
 
-(def tr (t/reader :json))
-(defn- json-read [str] (t/read tr str))
+(defn- json-read [str] (-> str JSON/parse (js->clj :keywordize-keys true)))
 
 (defn login! [idtoken]
   (p/promise
@@ -55,5 +53,5 @@
 (defn alloc! []
   (-> (create-inventory!)
       (p/then
-       (fn [{:strs [assetid] :as body}]
+       (fn [{:keys [assetid] :as body}]
          (om/transact! core/reconciler `[(session/add-asset {:id ~assetid})])))))

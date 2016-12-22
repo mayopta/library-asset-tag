@@ -31,7 +31,7 @@
               (case status
                 :loading (loading/view)
                 :logged-out (login/view)
-                :logged-in (main/view session)))))))
+                :logged-in (main/view (om/props this))))))))
 
 (defn init []
   (om/add-root! core/reconciler

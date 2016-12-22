@@ -12,30 +12,37 @@
             [om.dom :as dom]))
 
 (defui View
+  static om/IQuery
+  (query [this]
+         [:login])
   Object
   (render [this]
-          (dom/div nil
-                   (ui/app-bar
-                    {:title "Mayo Library Assets"
-                     :show-menu-icon-button false
-                     :icon-element-right
-                     (ui/flat-button
-                      {:label     "Logout"
-                       :secondary true
-                       :on-touch-tap   #(auth/logout)})})
-                   (ui/tabs
-                    nil
-                    (ui/tab
-                     {:label "Home"
-                      :icon (ic/action-home)}
-                     (-> this om/props home/view))
-                    (ui/tab
-                     {:label "Activity"
-                      :icon (ic/action-restore)}
-                     (activity/view))
-                    (ui/tab
-                     {:label "Settings"
-                      :icon (ic/action-settings)}
-                     (settings/view))))))
+          (let [{:keys [login session]} (om/props this)]
+            (dom/div nil
+                     (ui/app-bar
+                      {:title "Mayo Library Assets"
+                       :show-menu-icon-button false
+                       :icon-element-right
+                       (ui/flat-button
+                        {:label     "Logout"
+                         :secondary true
+                         :on-touch-tap   #(auth/logout)})})
+                     (ui/tabs
+                      nil
+                      (ui/tab
+                       {:label "Home"
+                        :icon (ic/action-home)}
+                       (home/view session))
+                      (ui/tab
+                       {:label "Activity"
+                        :icon (ic/action-restore)}
+                       (activity/view))
+                      (ui/tab
+                       {:label "Settings"
+                        :icon (ic/action-settings)}
+                       (settings/view)))
+                     (ui/snackbar {:open false
+                                   :auto-hide-duration 4000
+                                   :message (str "Logged in as " (-> login :user :email))})))))
 
 (def view (om/factory View))
