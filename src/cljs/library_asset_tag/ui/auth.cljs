@@ -56,7 +56,7 @@
 (defn logout []
   (-> (google-signout!)
       (p/then client/logout!)
-      (p/then refresh)))
+      (p/then #(update nil))))
 
 (defn- _init []
   (.. js/gapi.auth2 (init #js {:client_id client_id
