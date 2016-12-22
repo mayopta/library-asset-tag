@@ -27,6 +27,13 @@
                                (dom/div #js {:className "col-xs-8"
                                             :id "current-id"}
                                         (dom/h1 nil (first assets))))
+                      (dom/div #js {:className "row center-xs"}
+                               (dom/div #js {:className "col-xs-12"}
+                                        (dom/h3 #js {:style
+                                                     #js {:margin-bottom "10px"
+                                                          :margin-top "10px"}}
+                                                "Session History")
+                                        (ui/divider nil)))
                       (dom/div #js {:className "row"}
                                (dom/div #js {:className "col-xs-12"}
                                         (ui/table
