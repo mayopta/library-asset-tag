@@ -9,6 +9,7 @@
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.session :refer [wrap-session]]
             [ring.middleware.gzip :refer [wrap-gzip]]
+            [ring.util.response :refer :all]
             [buddy.auth.backends :as backends]
             [buddy.auth :refer [authenticated? throw-unauthorized]]
             [buddy.auth.middleware :refer [wrap-authentication wrap-authorization]]
@@ -38,6 +39,9 @@
 
 (defroutes main-routes
   api-routes
+  (GET "/" [] (-> "index.html"
+                  (resource-response {:root "public"})
+                  (content-type "text/html")))
   (route/resources "/")
   (route/not-found "Page not found"))
 
