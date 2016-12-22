@@ -10,7 +10,6 @@
 (defn inst [] (.. js/gapi.auth2 (getAuthInstance)))
 
 (defn- set-state! [user]
-  (println "set-state:" user)
   (om/transact! core/reconciler (if user
                                   `[(auth/login {:status :logged-in :user ~user})]
                                   '[(auth/login {:status :logged-out :user nil})])))
@@ -40,7 +39,6 @@
                :id_token))))
 
 (defn- app-signin! [& args]
-  (println "app-signin")
   (if (google-signedin?)
     (-> (get-google-token)
         (p/then client/login!))

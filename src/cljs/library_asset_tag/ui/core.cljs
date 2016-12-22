@@ -23,7 +23,6 @@
 
 (defmethod mutate 'auth/login
   [{:keys [state]} k {:keys [status user]}]
-  (println "user:" user)
   {:action
    (fn []
      (swap! state assoc-in [:login :status] status)
