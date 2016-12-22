@@ -1,4 +1,4 @@
-(ns library-asset-tag.ui.home
+(ns library-asset-tag.ui.create
   (:require [library-asset-tag.ui.client :as client]
             [cljsjs.material-ui]
             [cljs-react-material-ui.core :as ui]

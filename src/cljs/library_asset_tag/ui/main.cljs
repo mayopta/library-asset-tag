@@ -1,7 +1,7 @@
 (ns library-asset-tag.ui.main
   (:require [library-asset-tag.ui.core :as core]
             [library-asset-tag.ui.auth :as auth]
-            [library-asset-tag.ui.home :as home]
+            [library-asset-tag.ui.create :as create]
             [library-asset-tag.ui.activity :as activity]
             [library-asset-tag.ui.settings :as settings]
             [cljsjs.material-ui]
@@ -43,9 +43,9 @@
                      (ui/tabs
                       nil
                       (ui/tab
-                       {:label "Home"
-                        :icon (ic/action-home)}
-                       (home/view session))
+                       {:label "Create"
+                        :icon (ic/content-add-circle-outline)}
+                       (create/view session))
                       (ui/tab
                        {:label "Activity"
                         :icon (ic/action-restore)}
