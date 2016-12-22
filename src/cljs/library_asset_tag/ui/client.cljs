@@ -35,9 +35,8 @@
      (GET "/api/v1/login" {}
           {:handler
            (fn [{:keys [body status] :as response}]
-             (case status
-               200 (-> body json-read resolve)
-               401 (resolve false)
+             (if (= status 200)
+               (-> body json-read resolve)
                (reject response)))}))))
 
 (defn create-inventory! []
