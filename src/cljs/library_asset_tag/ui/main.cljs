@@ -3,6 +3,7 @@
             [library-asset-tag.ui.auth :as auth]
             [library-asset-tag.ui.home :as home]
             [library-asset-tag.ui.activity :as activity]
+            [library-asset-tag.ui.settings :as settings]
             [cljsjs.material-ui]
             [cljs-react-material-ui.core :as ui]
             [cljs-react-material-ui.icons :as ic]
@@ -30,6 +31,10 @@
                     (ui/tab
                      {:label "Activity"
                       :icon (ic/action-restore)}
-                     (activity/view))))))
+                     (activity/view))
+                    (ui/tab
+                     {:label "Settings"
+                      :icon (ic/action-settings)}
+                     (settings/view))))))
 
 (def view (om/factory View))
