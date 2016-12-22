@@ -13,7 +13,7 @@
   (d/function {:lang :clojure
                :params '[db id context]
                :code '(let [entity (d/entity db :sequence/id)
-                           assetid (or (:sequence/next entity) 1)]
+                           assetid (or (:sequence/next entity) 10006500)]
                        [{:db/id :sequence/id
                          :sequence/next (inc assetid)}
                         {:db/id id
