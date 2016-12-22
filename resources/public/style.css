@@ -386,3 +386,7 @@ input::-moz-focus-inner {
 #action-buttons {
     margin: 7px;
 }
+
+#current-id {
+    font-size: 46px;
+}
