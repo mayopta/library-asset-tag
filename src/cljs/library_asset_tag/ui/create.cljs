@@ -9,7 +9,7 @@
             [cljs-time.coerce :as c]
             [cljs-time.format :as f]))
 
-(def timestamp-formatter (f/formatters :rfc822))
+(def timestamp-formatter (f/formatters :mysql))
 
 (defn- convert-timestamp [ts]
   (->> ts c/from-long (f/unparse timestamp-formatter)))
