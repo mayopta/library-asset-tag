@@ -122,4 +122,5 @@
                        :prep-tasks ["compile" ["cljsbuild" "once" "min"]]
                        :hooks []
                        :omit-source true
+                       :uberjar-name "library-asset-tag-standalone.jar"
                        :aot :all}})
