@@ -40,8 +40,9 @@
       (exit -1 "Error: " (string/join errors))
 
       :else
-      (let [{:keys [port db-url]} options
-            db (db/connect db-url)]
+      (let [{:keys [port db-url]} options]
+        (println "starting with options:" options)
+        (db/connect db-url)
         (core/init)
         (run-jetty handler/app {:port port})))))
 
