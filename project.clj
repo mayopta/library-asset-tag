@@ -79,7 +79,7 @@
   ;; not be picked up, instead configure figwheel here on the top level.
 
   :figwheel {;; :http-server-root "public"       ;; serve static assets from resources/public/
-             ;; :server-port 3449                ;; default
+             :server-port 3000
              ;; :server-ip "127.0.0.1"           ;; default
              :css-dirs ["resources/public/css"]  ;; watch and update CSS
 
