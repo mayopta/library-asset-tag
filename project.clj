@@ -105,7 +105,7 @@
              ;;
              ;; :open-file-command "myfile-opener"
 
-             :server-logfile "log/figwheel.log"}
+             :server-logfile false}
 
   :profiles {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
                                   [ring/ring-mock "0.3.0"]
