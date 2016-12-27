@@ -6,7 +6,8 @@
             [slingshot.slingshot :as slingshot]
             [clj-time.core :as t]
             [clj-time.coerce :as c]
-            [clj-time.local :as l]))
+            [clj-time.local :as l])
+  (:refer-clojure :exclude [get]))
 
 (def text-content {"Content-Type" "text/plain"})
 (def json-content {"Content-Type" "application/json"})

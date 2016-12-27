@@ -1,6 +1,7 @@
 (ns library-asset-tag.sequence
   (:require [library-asset-tag.db :as database]
-            [datomic.api :refer [tempid] :as datomic]))
+            [datomic.api :refer [tempid] :as datomic])
+  (:refer-clojure :exclude [get set]))
 
 (defn get []
   (let [db (-> (database/get-connection) datomic/db)
