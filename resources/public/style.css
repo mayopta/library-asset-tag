@@ -382,9 +382,14 @@ input::-moz-focus-inner {
 #app {
     padding: 0;
     margin: 0;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
     display: flex;
     height: 100%;
     width: 100%;
+    background-color: #7986CB;
 }
 
 #action-buttons {
@@ -393,4 +398,18 @@ input::-moz-focus-inner {
 
 #current-id {
     font-size: 46px;
+}
+
+#app-loading {
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+#logo {
+    width: 33%;
+}
+
+#login-indicator {
+    position: relative;
 }

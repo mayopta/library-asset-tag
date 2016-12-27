@@ -27,7 +27,8 @@
                                   :accent1-color (ui/color :lime-500)
                                   :accent2-color (ui/color :lime-900)
                                   :accent3-color (ui/color :lime-900)}})}
-             (dom/div nil
+             (dom/div
+              nil
               (case status
                 :loading (loading/view)
                 :logged-out (login/view)
