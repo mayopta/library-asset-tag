@@ -19,7 +19,7 @@
                  [cheshire "5.6.3"]
                  [slingshot "0.12.2"]
                  [cljsjs/google-platformjs-extern "1.0.0-0"]
-                 [funcool/promesa "1.3.1"]
+                 [funcool/promesa "1.7.0"]
                  [bk/ring-gzip "0.1.1"]
                  [clj-time "0.12.2"]
                  [com.andrewmcveigh/cljs-time "0.4.0"]
