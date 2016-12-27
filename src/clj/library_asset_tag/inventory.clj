@@ -6,7 +6,11 @@
             [slingshot.slingshot :as slingshot]
             [clj-time.core :as t]
             [clj-time.coerce :as c]
-            [clj-time.local :as l])
+            [clj-time.local :as l]
+            [taoensso.timbre :as timbre
+             :refer [log  trace  debug  info  warn  error  fatal  report
+                     logf tracef debugf infof warnf errorf fatalf reportf
+                     spy get-env]])
   (:refer-clojure :exclude [get]))
 
 (def text-content {"Content-Type" "text/plain"})
@@ -98,12 +102,14 @@
         assetid (->> invid
                      (datomic/resolve-tempid db-after tempids)
                      (datomic/entity db-after)
-                     :inventory/assetid)]
+                     :inventory/assetid)
+        body (json/generate-string {:assetid assetid
+                                    :timestamp timestamp})]
 
+    (info "Allocating: " body)
     {:status 201
      :headers (merge {"Location" (str uri "/" assetid)} json-content)
-     :body (json/generate-string {:assetid assetid
-                                  :timestamp timestamp})}))
+     :body body}))
 
 ;;---------------------------------------------------------------------------
 ;; get-by-id - Retrieves a specific asset from the database
