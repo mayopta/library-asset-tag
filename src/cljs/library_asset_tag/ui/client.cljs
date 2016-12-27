@@ -7,7 +7,7 @@
 
 (h/set-default-client! (hc/create))
 
-(defn- json-read [str] (-> str JSON/parse (js->clj :keywordize-keys true)))
+(defn- json-read [str] (-> str js/JSON.parse (js->clj :keywordize-keys true)))
 
 (defn login! [idtoken]
   (p/promise
