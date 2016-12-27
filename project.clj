@@ -109,8 +109,8 @@
 
   :profiles {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
                                   [ring/ring-mock "0.3.0"]
-                                  [figwheel "0.5.4-4"]
-                                  [figwheel-sidecar "0.5.4-4"]
+                                  [figwheel "0.5.8"]
+                                  [figwheel-sidecar "0.5.8"]
                                   [com.cemerick/piggieback "0.2.1"]
                                   [org.clojure/tools.nrepl "0.2.12"]]
                    :plugins [[lein-figwheel "0.5.4-4"]
