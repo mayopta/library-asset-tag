@@ -1,8 +1,8 @@
 (ns library-asset-tag.ui.root
   (:require [library-asset-tag.ui.core :as core]
-            [library-asset-tag.ui.loading :as loading]
-            [library-asset-tag.ui.login :as login]
-            [library-asset-tag.ui.main :as main]
+            [library-asset-tag.ui.view.loading :as loading]
+            [library-asset-tag.ui.view.login :as login]
+            [library-asset-tag.ui.view.main :as main]
             [cljsjs.material-ui]
             [cljs-react-material-ui.core :as ui]
             [cljs-react-material-ui.icons :as ic]

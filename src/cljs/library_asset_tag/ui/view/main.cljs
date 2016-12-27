@@ -1,4 +1,4 @@
-(ns library-asset-tag.ui.main
+(ns library-asset-tag.ui.view.main
   (:require [library-asset-tag.ui.core :as core]
             [library-asset-tag.ui.auth :as auth]
             [library-asset-tag.ui.create :as create]

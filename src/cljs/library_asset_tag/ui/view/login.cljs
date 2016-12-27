@@ -1,4 +1,4 @@
-(ns library-asset-tag.ui.login
+(ns library-asset-tag.ui.view.login
   (:require [library-asset-tag.ui.auth :as auth]
             [cljsjs.material-ui]
             [cljs-react-material-ui.core :as ui]
