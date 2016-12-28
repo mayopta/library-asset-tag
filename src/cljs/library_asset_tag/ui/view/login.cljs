@@ -10,30 +10,29 @@
 (defui View
   Object
   (render [this]
-          (dom/div #js {
-                                 :style #js {:display "flex"
-                                             :align-items "center"
-                                             :justify-content "center"
-                                             :margin "10px"
-                                             :width "100%"}}
-                            (ui/card
-                             nil
-                             (ui/card-media
-                              {}
-                              (dom/img #js {:src "books.jpg"}))
-                             (ui/card-title
-                              {:title "Mayo Elementary School, Holden MA"
-                               :subtitle "Please log in"})
-                             (ui/card-text
-                              {}
-                              "Welcome to the Mayo PTA Library Asset Tag generator.  This program requires an active @mayopta.com account")
-                             (ui/card-actions
-                              {}
-                              (ui/raised-button
-                               {:label          "Sign In"
-                                :primary        true
-                                :label-position :before
-                                :icon           (ic/action-verified-user)
-                                :on-touch-tap   #(auth/login)}))))))
+          (dom/div #js {:style #js {:display "flex"
+                                    :align-items "center"
+                                    :justify-content "center"
+                                    :margin "10px"
+                                    :width "100%"}}
+                   (ui/card
+                    nil
+                    (ui/card-media
+                     {}
+                     (dom/img #js {:src "books.jpg"}))
+                    (ui/card-title
+                     {:title "Mayo Elementary School, Holden MA"
+                      :subtitle "Please log in"})
+                    (ui/card-text
+                     {}
+                     "Welcome to the Mayo PTA Library Asset Tag generator.  This program requires an active @mayopta.com account")
+                    (ui/card-actions
+                     {}
+                     (ui/raised-button
+                      {:label          "Sign In"
+                       :primary        true
+                       :label-position :before
+                       :icon           (ic/action-verified-user)
+                       :on-touch-tap   #(auth/login)}))))))
 
 (def view (om/factory View))
