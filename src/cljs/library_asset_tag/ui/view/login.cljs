@@ -10,8 +10,12 @@
 (defui View
   Object
   (render [this]
-          (dom/div #js {:className "row center-xs"}
-                   (dom/div #js {:className "col-xs-12"}
+          (dom/div #js {
+                                 :style #js {:display "flex"
+                                             :align-items "center"
+                                             :justify-content "center"
+                                             :margin "10px"
+                                             :width "100%"}}
                             (ui/card
                              nil
                              (ui/card-media
@@ -30,6 +34,6 @@
                                 :primary        true
                                 :label-position :before
                                 :icon           (ic/action-verified-user)
-                                :on-touch-tap   #(auth/login)})))))))
+                                :on-touch-tap   #(auth/login)}))))))
 
 (def view (om/factory View))
