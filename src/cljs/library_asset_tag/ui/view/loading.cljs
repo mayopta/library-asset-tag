@@ -8,25 +8,26 @@
   Object
   (render [this]
           (dom/div
-           #js {:id "app-loading"}
-           (dom/div
-            #js {:className "row center-xs"}
-            (dom/div #js {:className "col-xs-12"}
-                     (dom/img
-                      #js {:id "logo"
-                           :src "logo.png"})))
-           (dom/div
-            #js {:className "row center-xs"}
-            (dom/div #js {:className "col-xs-8"}
-                     (dom/h1 nil
-                             "Checking login status"))
-            (dom/div #js {:className "col-xs-4"
-                          :id "login-indicator"}
+           #js {:id "app-loading"
+                :className "row center-xs"}
+           (dom/div #js {:className "col-xs-12"
+                         :style #js {:height "33%"}}
+                    (dom/img
+                     #js {:id "logo"
+                          :src "logo.png"})
+                    (dom/div
+                     #js {:style #js {:position "relative"
+                                      :display "flex"
+                                      :flex-direction "row"
+                                      :justify-content "center"}}
+                     (dom/h1 #js {:style #js {:width "auto"}}
+                             "Checking login status")
                      (ui/refresh-indicator
-                      {:size 30
+                      {:size 20
                        :top 0
-                       :left 0
+                       :left 5
                        :status "loading"
-                       :style {:position "relative"}}))))))
+                       :style {:position "relative"
+                               :flex "0"}}))))))
 
 (def view (om/factory View))
