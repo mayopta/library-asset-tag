@@ -25,16 +25,12 @@
                  [com.andrewmcveigh/cljs-time "0.4.0"]
                  [com.taoensso/timbre "4.8.0"]]
 
-  :plugins [[lein-ring "0.9.7"]
-            [lein-cljsbuild "1.1.3"]
+  :plugins [[lein-cljsbuild "1.1.3"]
             [lein-environ "1.0.3"]]
 
   :source-paths ["src/clj" "src/cljs" "src/cljc"]
   :test-paths ["test/clj" "test/cljc"]
   :clean-targets ^{:protect false} [:target-path :compile-path "resources/public/js"]
-
-  :ring {:init library-asset-tag.handler/mock-init
-         :handler library-asset-tag.handler/app}
 
   :main ^:skip-aot library-asset-tag.main
 
