@@ -4,7 +4,10 @@
             [library-asset-tag.db :as db]
             [clojure.string :as string]
             [clojure.tools.cli :refer [parse-opts]]
-            [ring.adapter.jetty :refer [run-jetty]])
+            [compojure.handler :refer [site]]
+            [org.httpkit.server :refer [run-server]]
+            [beckon :as beckon]
+            [clojure.core.async :refer [<!! >!!] :as async])
   (:gen-class))
 
 (def options
@@ -19,7 +22,7 @@
 (defn exit [status msg & rest]
   (do
     (apply println msg rest)
-    status))
+    (System/exit status)))
 
 (defn prep-usage [msg] (->> msg flatten (string/join \newline)))
 
@@ -29,7 +32,7 @@
                "Options:"
                options-summary]))
 
-(defn -app [& args]
+(defn -main [& args]
   (let [{:keys [options arguments errors summary]} (parse-opts args options)]
     (cond
 
@@ -44,7 +47,13 @@
         (println "starting with options:" options)
         (db/connect db-url)
         (core/init)
-        (run-jetty handler/app {:port port})))))
 
-(defn -main [& args]
-  (System/exit (apply -app args)))
+        (let [stopfn (run-server handler/app {:port port})
+              stopsig (async/chan)]
+
+          (doseq [signame ["INT" "TERM"]]
+            (reset! (beckon/signal-atom signame) [#(>!! stopsig signame)]))
+
+          (let [sig (<!! stopsig)]
+            (println "Received" sig "signal")
+            (stopfn)))))))

@@ -5,9 +5,12 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.293"]
                  [org.clojure/tools.cli "0.3.5"]
+                 [org.clojure/core.async "0.2.395"]
                  [compojure "1.5.1"]
                  [ring "1.5.0"]
                  [ring/ring-defaults "0.2.1"]
+                 [http-kit "2.2.0"]
+                 [beckon "0.1.1"]
                  [buddy/buddy-auth "1.3.0"]
                  [com.datomic/datomic-free "0.9.5407"
                   :exclusions [com.google.guava/guava]]
